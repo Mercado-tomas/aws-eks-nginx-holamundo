@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hola-mundo-nginx
+  namespace: hola-mundo-nginx
+  labels:
+    app: hola-mundo-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hola-mundo-nginx
+  template:
+    metadata:
+      labels:
+        app: hola-mundo-nginx
+    spec:
+      containers:
+      - name: hola-mundo-nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /usr/share/nginx/html
+          subPath: index.html
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: hola-mundo-nginx-config
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hola-mundo-nginx-config
+  namespace: hola-mundo-nginx
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Hola Mundo Nginx</title>
+    </head>
+    <body>
+        <h1>¡Hola, Mundo desde Nginx!</h1>
+        <p>Esta es una página servida por Nginx en Kubernetes.</p>
+    </body>
+    </html>  
