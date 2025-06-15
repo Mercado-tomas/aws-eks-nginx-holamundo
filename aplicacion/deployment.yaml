@@ -33,7 +33,7 @@ spec:
             cpu: "500m"
         volumeMounts:
         - name: nginx-config
-          mountPath: /usr/share/nginx/html
+          mountPath: /usr/share/nginx/html/index.html
           subPath: index.html
       volumes:
       - name: nginx-config
