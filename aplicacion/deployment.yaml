@@ -4,7 +4,7 @@ metadata:
   name: hola-mundo-nginx
   namespace: hola-mundo-nginx
   labels:
-    app: hola-mundo-nginx
+    app: hola-mundo-nginx  
 spec:
   replicas: 3
   selector:
@@ -13,11 +13,15 @@ spec:
   template:
     metadata:
       labels:
-        app: hola-mundo-nginx
+        app: hola-mundo-nginx  
     spec:
+      securityContext:
+        fsGroup: 101
       containers:
       - name: hola-mundo-nginx
         image: nginx:latest
+        securityContext:
+          runAsUser: 0
         ports:
         - containerPort: 80
         resources:
