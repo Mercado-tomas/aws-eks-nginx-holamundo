@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  # El nombre de tu aplicación en la interfaz de ArgoCD
+  name: hola-mundo-aws-eks-app
+  # esta aplicación vive en el namespace 'argocd'
+  namespace: argocd
+spec:
+  # Le decimos a qué proyecto de ArgoCD pertenece. Usaremos 'default'.
+  project: default
+  
+  # SOURCE: De dónde vienen los archivos YAML de tu app
+  source:
+    # La URL de tu repositorio
+    repoURL: 'https://github.com/Mercado-tomas/aws-eks-nginx-holamundo.git'
+    # La carpeta dentro del repo que Argo debe mirar
+    path: aplicacion
+    # La rama que debe vigilar
+    targetRevision: HEAD
+    
+  # DESTINATION: Dónde se deben desplegar los recursos
+  destination:
+    # El clúster de destino (el mismo clúster donde corre Argo)
+    server: 'https://kubernetes.default.svc'
+    # El namespace de destino para TUS recursos (nginx, etc.)
+    namespace: hola-mundo-nginx # 
+    
+  # SYNC POLICY: Cómo debe sincronizar los cambios
+  syncPolicy:
+    automated:
+      # Borra recursos que ya no están en Git
+      prune: true
+      # Arregla cambios manuales hechos en el clúster
+      selfHeal: true
+    # Crea el namespace de destino si no existe
+    syncOptions:
+    - CreateNamespace=true
